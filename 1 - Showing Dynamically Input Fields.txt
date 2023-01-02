@@ -1,0 +1,184 @@
+------------------------------------------------------HTML Form ---------------------------------
+ <section class="vid-title-sec">
+                                    <div class="container"> 
+                                       
+                                        <form method="post" id ="model_project_create">
+                                            {!! csrf_field() !!}
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-4 col-sm-12 col-12">
+                                                    <div class="vid-title">
+                                                        <h2 class="title-hd">Name of the Project</h2>
+                                                        <div class="form_field">
+                                                            <input type="text" style="" name="project_name"
+                                                                placeholder="Event Name" />
+                                                            <span class="text-danger" id="ProjectnameErrorMsg"></span>
+                                                        </div>
+                                                    </div>
+                                                    <!--vid-title-->
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></br></br></div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-4 col-sm-12 col-12">
+                                                    
+                                                    <div class="option">
+                                                        <h2 class="title-hd">No. of Participant</h2>
+                                                        <div class="form_field">
+                                                            <select name= "no_of_participent_selector" id = "no_of_participent_selector">
+                                                                <option> Please Select a value </option>
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+
+                                                            </select>
+                                                            
+                                                            <a href="#" title="" class="arw_vz">
+                                                                <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M19.9394 7.51447L22.0607 9.63579L12 19.6964L1.93936 9.63579L4.06068 7.51447L12 15.4538L19.9394 7.51447Z" fill="#9494A0"></path>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                    </div><!--option end-->
+                                                    <span class="text-danger" id="NumberofMemberError"></span>
+                                                </div>
+
+                                         
+
+                                            </div>
+                                            <div class="clearfix"></br></br></div>
+
+                                            <div class="cls-vidz">
+                                          
+
+                                            <div class="cls-vidz" id="participant_main_div">
+                                                  
+                                                    <div class="clearfix"></div>
+                                                    
+                                                    <!--btn-sbmit end-->
+                                               
+                                            </div>
+                                            <!--cls-vidz end-->
+                                            <div class="clearfix"></br></br></div>
+                                            <div class="clearfix"></br></br></div>
+                                        
+                                    </div>
+                                </section>
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------JQUERY ---------------------------------------------------------------------------------------
+
+$("#no_of_participent_selector").change(function(){
+            var value = $(this).val();
+            var element_main_div = $('#participant_main_div').empty();
+      
+            var nr = 1;
+            while(nr <= value){
+            
+              var groupFieldSet = $('<fieldset></fieldset>'),
+                addLengend = $('<legend><h3>Participant : '+nr+'</h3></legend>');
+                   
+                    // add each member
+                var main_row_div = $('<div class= "row"></div>')
+                
+                var row_6_div = $('<div class="col-lg-6"></div>')
+                var option_div = $('<div class="option"></div>') , 
+                        label_name = $('<h4 class="slct-hd">Name </h4>');
+
+                var div_dob_name = $('<div class="form_field" id = "input_name_div_participant">')
+                
+                var memberInputName = $('<input type="text" id="name_'+nr+'" name="name_'+nr+'" placeholder = "Enter the Name" /><span class="text-danger" id="name_span_'+nr+'"></span>')
+
+
+      
+                var sec_row_6_div = $('<div class="col-lg-6"></div>')
+                var option_sec_div = $('<div class="option"></div>') , 
+                    label_sec_name = $('<h4 class="slct-hd">Email </h4>');
+
+                var div_sec_dob_name = $('<div class="form_field" id = "input_name_div_participant">')
+                
+                var memberInputEmail = $('<input type="text" id="email_'+nr+'" name="email_'+nr+'" placeholder = "Enter the Email" />')
+    
+                main_row_div.append(row_6_div)
+                row_6_div.append(option_div)
+                option_div.append(label_name) 
+                option_div.append(div_dob_name)              
+                div_dob_name.append(memberInputName)
+                main_row_div.append($('<div class="clearfix"></div>')) 
+                      
+
+                main_row_div.append(sec_row_6_div)
+                sec_row_6_div.append(option_sec_div)
+                option_sec_div.append(label_sec_name) 
+                option_sec_div.append(div_sec_dob_name)              
+                div_sec_dob_name.append(memberInputEmail)
+                main_row_div.append($('<div class="clearfix"></div>')) 
+                
+                element_main_div.append(groupFieldSet)
+                groupFieldSet.append(main_row_div)
+               
+                groupFieldSet.append(addLengend)
+                groupFieldSet.append($('<div class="clearfix"></div>')) 
+                nr++;
+            }
+        })
+
+
+---------------------------------------------------------------------------CONTROLLER ---------------------------------------------------------------------------------------------------------------------------
+
+ public function PostKitchenManagementProjectCreate(Request $request)
+    { 
+        if (!Auth::user()) {
+    		return redirect()->back()->withFailure('Please Login first.!');		
+    	} 
+        $data = $request->all();
+        $selector_value = $data['no_of_participent_selector'];
+        $request_validate = [];
+        $request_validate['project_name'] = 'required';
+        $request_validate['no_of_participent_selector'] = 'required|numeric|min:0';
+        // if ($data['no_of_participent_selector'] > 0 ) {
+        //     $request_validate['name_1'] = 'required';
+        // }
+        $user = \Auth::user();
+      
+        $request->validate($request_validate);
+        
+        $member_name = '';
+        $member_emails = '';
+        
+        for ($i = 1; $i <=$selector_value;$i++) {
+            if ($i == 1) {
+                $member_name .= $data['name_'.$i];
+                if ($data['email_1']) {
+                    $member_emails .= $data['email_'.$i];
+                } 
+                
+            } else {
+                $member_name .= ','.$data['name_'.$i];
+                if ($data['email_1']) {
+                    $member_emails .= ','.$data['email_'.$i];
+                }
+                
+            }
+            
+        }
+
+        PersonalInvestmentProjectName::create(array ('name' => $data['project_name'],'status' => 1,'no_of_members'=> $data['no_of_participent_selector'] , 'member_names'=> $member_name,'member_emails'=>$member_emails));
+        
+        //return redirect("/personal_kitchen_management")->withSuccess('Entry added successfully!');
+    }
+
+
+
+
