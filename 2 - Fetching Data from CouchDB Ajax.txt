@@ -1,0 +1,20 @@
+var url_path = "http://username:password@url/_design/views/_view/timestamp_data_pm25?inclusive_end=true&start_key=%222023-01-30T00%3A00%3A00.000Z%22&end_key=%222023-01-31T00%3A00%3A00.000Z%22";
+
+$.ajax({
+    url: url_path,
+    type:'GET',
+    contentType: "application/json",
+    dataType : 'json',
+    beforeSend: function (xhr) {
+            var base64    = "Basic " + btoa("username" + ":" + "password");
+            xhr.setRequestHeader("Authorization", base64);
+    },
+
+    success: function(data){
+        console.log(data)
+        console.log("successfully loaded.");
+    },
+    error: function(xhr) {
+        console.log("error")
+    }
+});
