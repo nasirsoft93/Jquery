@@ -1,0 +1,26 @@
+ $('#file-upload').change(function(){
+        	const file = this.files[0];
+        	//console.log(type(file));
+	        if (file){
+
+				var fileInput = document.getElementById('file-upload');
+				//Get the file name
+				var fileName = fileInput.files[0].name;
+				//Get the file Extension 
+				var fileExtension = fileName.split('.').pop();
+
+
+	          let reader = new FileReader();
+	          reader.onload = function(event){
+				
+				if (fileExtension == 'pdf') {
+					
+					$('#profile_img').hide();
+					$('#pdf_default_img').attr("src", "{{ asset('assets/images/portfolio/pdf.png') }}");
+				}
+
+	            $('#profile_img').attr('src', event.target.result);
+	          }
+	          reader.readAsDataURL(file);
+	        }
+      	});
